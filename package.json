@@ -1,0 +1,52 @@
+{
+  "name": "harmonium",
+  "scripts": {
+    "build": "babel --presets=es2015 server/src generated_config.js --out-dir server/dist --source-maps && webpack --progress --profile --colors --display-error-details",
+    "watch": "babel --presets=es2015 --watch server/src generated_config.js --out-dir server/dist --source-maps & webpack  --progress --profile --colors --watch",
+    "start_server": "node server/dist/index.js",
+    "start_client": "webpack-dev-server --hot --inline --progress --colors",
+    "test": "echo \"No unit tests and e2e tests yet\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "babel-runtime": "*",
+
+    "express": "*",
+    "node-neo4j": "*",
+    "lodash": "*",
+    "d3": "3.*",
+    "simulate-touch": "*",
+    "bootstrap": "3.*",
+    "three": "0.73.*",
+    "webcola": "3.1.*",
+    "request": "2.67.*",
+    "feedparser": "1.1.*",
+    "vis": "4.15.*",
+
+    "react": "0.14.*",
+    "react-dom": "0.14.*",
+    "react-router-component": "0.27.*",
+    "react-grid-layout": "0.10.*",
+    "react-google-maps": "4.*",
+    "react-bootstrap": "0.28.*",
+
+    "redux": "3.3.*",
+    "react-redux": "4.4.*",
+    "redux-thunk": "1.0.*"
+  },
+  "devDependencies": {
+    "webpack": "1.*",
+    "webpack-dev-server": "1.*",
+    "html-webpack-plugin": "2.*",
+    "style-loader": "*",
+    "css-loader": "0.18.*",
+    "file-loader": "*",
+    "url-loader": "*",
+    "babel-cli": "6.*",
+    "babel-loader": "6.*",
+    "babel-core": "6.*",
+    "babel-preset-es2015": "6.*",
+    "babel-preset-stage-1": "6.*",
+    "babel-preset-react": "6.*"
+  }
+}

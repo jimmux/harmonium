@@ -1,0 +1,27 @@
+{
+  "name": "open-loader",
+  "scripts": {
+    "build": "babel --presets=es2015,stage-0 --plugins=syntax-async-functions src --out-dir dist --source-maps",
+    "test": "echo \"No unit tests and e2e tests yet\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "babel-runtime": "*",
+    "lodash": "*",
+    "n-readlines": "*",
+    "sqlite3": "*",
+    "csv-write-stream": "*",
+    "csv": "1.*"
+  },
+  "devDependencies": {
+    "webpack": "2.1.0-beta.6",
+    "babel-cli": "6.*",
+    "babel-core": "6.*",
+    "babel-loader": "6.*",
+    "babel-polyfill": "6.*",
+    "babel-preset-es2015": "6.*",
+    "babel-preset-stage-0": "6.*"
+  }
+}
+
+

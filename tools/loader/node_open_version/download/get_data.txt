@@ -1,0 +1,61 @@
+=== Music examples ===
+
+Get the required data from here:
+
+From the subset at http://labrosa.ee.columbia.edu/millionsong/pages/getting-dataset#subset:
+
+    * Artist locations: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/artist_location.txt
+    * Full metadata: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/track_metadata.db
+    * Artist tags: http://www.ee.columbia.edu/~thierry/artist_term.db
+    * Artist similarity: http://www.ee.columbia.edu/~thierry/artist_similarity.db
+
+Bonus data sets from http://labrosa.ee.columbia.edu/millionsong/pages/additional-datasets:
+    * User listen counts: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/challenge/train_triplets.txt.zip
+
+MusicBrainz at http://ftp.musicbrainz.org/pub/musicbrainz/data/fullexport/:
+    * Latest directory, then file mbdump.tar.bz2
+
+Amazon data from: https://snap.stanford.edu/data/amazon-meta.html
+    * https://snap.stanford.edu/data/bigdata/amazon/amazon-meta.txt.gz
+
+
+Put them in the download directory, under subdirectories "musicbrainz" and "millionsong" - or link to wherever they are.
+E.g. ln -s ~/data/millionsong download/millionsong
+
+Remember to extract any compressed files!
+
+
+Convert to CSVs, so they can be used with the import tool:
+
+* Using a tool like sqliteman, export the results of these queries (with headers) to their corresponding files:
+
+    -- From track_metadata.db to artist.csv
+    select
+        s.artist_id msid,
+        s.artist_mbid mbid,
+        s.artist_name name,
+        s.artist_familiarity familiarity,
+        s.artist_hotttnesss hotttnesss
+    from songs s
+    where length(mbid) > 0
+
+
+    
+
+=== Panama Papers and complementary World Bank statistics ===
+
+Processed graph data from Panama Papers leak (file or torrent):
+https://cloudfront-files-1.publicintegrity.org/offshoreleaks/data-csv.zip#_ga=1.244382213.1679347147.1461740653
+https://cloudfront-files-1.publicintegrity.org/offshoreleaks/data-csv.zip.torrent#_ga=1.250106118.1679347147.1461740653
+
+Listed domestic companies (via DOWNLOAD DATA > CSV):
+http://data.worldbank.org/indicator/CM.MKT.LDOM.NO
+
+Global Financial Development (CSV):
+http://data.worldbank.org/data-catalog/global-financial-development
+
+Basic country data from geonames:
+http://download.geonames.org/export/dump/allCountries.zip
+http://download.geonames.org/export/dump/cities15000.txt
+
+

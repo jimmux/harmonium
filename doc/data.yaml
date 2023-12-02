@@ -1,0 +1,165 @@
+# Example data model:
+# Relationships: pointset n:n instrument n:n overlay
+# Multivariate attributes (e.g. layout and location) can be set on chart to set all axes
+
+
+instruments:
+  - type: "chartScatter"  # Probably don't need this, an instrument is an instance of a react class
+    props:
+      pointsets: []    # Refs
+    state:
+      sources: [] # refs to relevant part of full data model, a series of multivariate data points - have multiple sources, e.g. for jaws chart?
+      filter: # or dimension, or extent - a filter function would be most flexible, e.g. can use dynamic time slices - same filter for all sources
+      overlays: # refs to associated overlay elements
+  - type: "chartScatter"
+  - type: "chartScatter"
+  - type: "map2d"
+  - type: "map3d"
+
+
+pointsets:
+  - name: "business_unit"    # name of entity type
+    defaults:
+      attributes: [location, sum_spend]  # Preferably list all, in order of preference, otherwise indeterminate
+    points:
+      - id: 0    # keys match attribute names
+        name: "Australia"
+        location: [-27.5, 143.1]
+        sum_spend: 500403.25  # probably calculated automatically from children by d3.hierarchy
+        children: [1, 2]
+
+      - id: 1
+        name: "Sydney"
+        location: [-27.8, 146.3]
+        sum_spend: 500000.25
+        children: []
+
+      - id: 2
+        name: "Melbourne"
+        location: [-29.1, 144.7]
+        sum_spend: 403.0
+        children: []
+      #...
+
+    attributes:
+      id:
+        visible: false
+        pretty: "ID"
+        type: id  # ref to attribute details
+
+      name:
+        visible: true
+        pretty: "Name"
+        type: label
+
+      location:
+        visible: true
+        pretty: "Location"
+        type: geo
+
+      sum_spend:
+        visible: true
+        pretty: "Location"
+        type: aud
+
+    filter:
+      # Very similar to filters on instruments, but affects the whole control panel and probably in seperate controls in left menu with metadata
+      # Probably not needed for initial version
+  - name: "vendor"
+    points:
+      -  id: 0
+        name: "Pies 4 Cheap"
+        location: [-27.5, 143.1]
+        sum_spend: 3005.3
+      #...
+    attributes:
+      id:
+        visible: false
+        pretty: "ID"
+        type: id
+      name:
+        visible: true
+        pretty: "Name"
+        type: label
+      location:
+        visible: true
+        pretty: "Location"
+        type: geo
+      sum_spend:
+        visible: true
+        pretty: "Location"
+        type: aud
+    filter:
+      #...
+  #...
+
+
+typeAttribute:
+  # All types have either a "primitive" (base type) or "children" (list of other types) - use classes for these.
+  # Format must match number of children if any.
+  id:
+    primitive: "int"
+    format: (s) => s
+    unique: true
+    structure: "sequential"
+    fScale: d3.scale.linear    # Could have multiple scales, e.g. normal linear, logarithmic, evenly distributed (aka ordered)
+  label:
+    primitive: "string"
+    format: (s) => "'" + s + "'"
+    unique: true
+    structure: "sequential"
+    fScale: d3.scale.linear
+  geo:
+    children:
+      - lat: "float"
+      - lon: "float"
+    format: (s) => `(${s[0]}°${((s[0] < 0) ? "W" : "E")}, ${s[1]}°${((s[1] < 0) ? "S" : "N")})`
+    unique: false
+    structure: "multi"
+    #fScale: null    # Not relevant with children
+  aud:
+    primitive: "float"
+    format: (s) => "$" + s
+    unique: false
+    structure: "linear"
+    fScale: d3.scale.linear
+  children:
+    structure: "hierarchy"
+
+
+typeInstrument:
+  # So we know what instruments can take what types - see if we achieve this with inheritance of instruments
+  #  - react uses composition, not great support for class inheritance yet
+  #  - probably okay, as all instruments use composition anyway, just make all instruments have a property
+  #    for type, which itself uses class inheritance
+  # Or, forget this and work it out, showing error if not enough available - needs to check both attribute type and
+  # structure to determine if it works, so maybe use a fValidateData (throw meaningful error) instead
+  map3d:
+    attributes:  [geo]  # The minimum attribute types this instrument needs to work
+  map2d:
+    attributes:  [geo]  # The minimum attribute types this instrument needs to work
+  chartScatter:
+    attributes: [linear, linear]
+  chartLine:
+    attributes: [linear, linear]
+  chartBar:
+    attributes: [linear]
+  chartHistogram:    # Reflects selections? Will we have selections? Probably not for initial prototype
+    attributes: [linear]
+  treemap:
+    attributes: [children or linear]  # Note treemap can be one level deep with only a single size value on each point
+  list:    # List for textual attributes, with filtering
+    attributes: [text]
+  search:    # Search best done as overlay?
+    attributes: *
+    fValidSets:    # Function taking a list of sets, to check validity - no need for attributes property with this - e.g. checks on number of sets used
+
+
+overlays:
+  # May be edge bundles, annotations, whatever, that sit on the overlay layer - each has associated instruments and will be updated when the instrument updates */
+  #...
+
+  # Have to do bundling better, keeping it light and streamlined - e.g. only ever show bundled edges from selections, and only to designated
+  # instruments - maybe create by selecting a point, which shows a ghost of all edges but is only permanent if you touch another instrument
+
+
